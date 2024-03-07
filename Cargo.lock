@@ -169,12 +169,68 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "523dc4f511e55ab87b694dc30d0f820d60906ef06413f93d4d7a1385599cc149"
 
 [[package]]
+name = "mixlayer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "http",
+ "log",
+ "mixlayer-data",
+ "mixlayer-graph",
+ "mixlayer-macros",
+ "mixlayer-runtime-ffi",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "mixlayer-ai"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "valence",
- "valence-runtime-ffi",
+ "mixlayer",
+ "mixlayer-runtime-ffi",
+]
+
+[[package]]
+name = "mixlayer-data"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "log",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "mixlayer-graph"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "log",
+ "mixlayer-data",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "mixlayer-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
+]
+
+[[package]]
+name = "mixlayer-runtime-ffi"
+version = "0.1.0"
+dependencies = [
+ "prost",
+ "prost-build",
+ "serde",
 ]
 
 [[package]]
@@ -409,62 +465,6 @@ name = "unicode-ident"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
-
-[[package]]
-name = "valence"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "http",
- "log",
- "serde",
- "serde_json",
- "valence-data",
- "valence-graph",
- "valence-macros",
- "valence-runtime-ffi",
-]
-
-[[package]]
-name = "valence-data"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytes",
- "log",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "valence-graph"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytes",
- "log",
- "serde",
- "serde_json",
- "valence-data",
-]
-
-[[package]]
-name = "valence-macros"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.48",
-]
-
-[[package]]
-name = "valence-runtime-ffi"
-version = "0.1.0"
-dependencies = [
- "prost",
- "prost-build",
- "serde",
-]
 
 [[package]]
 name = "which"

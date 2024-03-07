@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.79"
-valence = { path = "/Users/zackangelo/git/valence/lib" }
-valence-runtime-ffi = { path = "/Users/zackangelo/git/valence/runtime-ffi" }
+mixlayer = { path = "/Users/zackangelo/git/valence/lib" }
+mixlayer-runtime-ffi = { path = "/Users/zackangelo/git/valence/runtime-ffi" }

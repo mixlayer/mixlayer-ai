@@ -1,11 +1,11 @@
-use valence::{
+use mixlayer::{
     ai::FFIChatCompletionModel,
-    graph::{VNode, VNodeCtx, VTransform},
-    Frame, VGraph, VNodeRef,
+    graph::{MxlNode, MxlNodeCtx, MxlTransform},
+    Frame, MxlGraph, MxlNodeRef,
 };
 
 use anyhow::Result;
-use valence_runtime_ffi::protos::{BatchChatCompletionRequest, ChatCompletionRequest};
+use mixlayer_runtime_ffi::protos::{BatchChatCompletionRequest, ChatCompletionRequest};
 
 pub struct BatchChatCompletionXform {
     pub model: Box<dyn FFIChatCompletionModel + Send + Sync + 'static>,
@@ -19,8 +19,8 @@ impl BatchChatCompletionXform {
     }
 }
 
-impl VNode for BatchChatCompletionXform {
-    fn tick(&mut self, ctx: &mut VNodeCtx) -> Result<()> {
+impl MxlNode for BatchChatCompletionXform {
+    fn tick(&mut self, ctx: &mut MxlNodeCtx) -> Result<()> {
         if let Some(Frame::Data(prompts)) = self.recv(ctx) {
             let requests = prompts
                 .into_iter()
@@ -31,7 +31,7 @@ impl VNode for BatchChatCompletionXform {
                 .collect::<Vec<_>>();
 
             let request = BatchChatCompletionRequest { requests };
-            let messages: Vec<String> = valence::ai::batch_chat_completion_request(request)?;
+            let messages: Vec<String> = mixlayer::ai::batch_chat_completion_request(request)?;
 
             self.send(ctx, Frame::Data(messages))?;
         }
@@ -48,7 +48,7 @@ impl VNode for BatchChatCompletionXform {
     }
 }
 
-impl VTransform for BatchChatCompletionXform {
+impl MxlTransform for BatchChatCompletionXform {
     type Input = Vec<String>;
     type Output = Vec<String>;
 }
@@ -56,17 +56,17 @@ impl VTransform for BatchChatCompletionXform {
 pub trait ChatCompletionNodeOps {
     fn batch_chat_completion<M: FFIChatCompletionModel + Send + Sync + 'static>(
         &self,
-        g: &mut VGraph,
+        g: &mut MxlGraph,
         model: M,
-    ) -> VNodeRef<Vec<String>, Vec<String>>;
+    ) -> MxlNodeRef<Vec<String>, Vec<String>>;
 }
 
-impl<I> ChatCompletionNodeOps for VNodeRef<I, Vec<String>> {
+impl<I> ChatCompletionNodeOps for MxlNodeRef<I, Vec<String>> {
     fn batch_chat_completion<M: FFIChatCompletionModel + Send + Sync + 'static>(
         &self,
-        g: &mut VGraph,
+        g: &mut MxlGraph,
         model: M,
-    ) -> VNodeRef<Vec<String>, Vec<String>> {
+    ) -> MxlNodeRef<Vec<String>, Vec<String>> {
         self.transform(g, BatchChatCompletionXform::new(model))
     }
 }
